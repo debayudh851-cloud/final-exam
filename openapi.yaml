@@ -1,0 +1,1262 @@
+openapi: 3.0.3
+info:
+  title: Recruitment Intelligence API
+  version: 1.0.0
+paths:
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifiedToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifiedToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifiedToken'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifiedToken'
+          description: ''
+  /api/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Logout'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Logout'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Logout'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/auth/refresh/:
+    post:
+      operationId: auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/auth/register/:
+    post:
+      operationId: auth_register_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register'
+          description: ''
+  /api/auth/verify/:
+    post:
+      operationId: auth_verify_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Verify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Verify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Verify'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/batches/{id}/download/{kind}/:
+    get:
+      operationId: batches_download_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: kind
+        schema:
+          type: string
+        required: true
+      tags:
+      - batches
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/batches/{id}/status/:
+    get:
+      operationId: batches_status_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - batches
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Batch'
+          description: ''
+  /api/batches/upload/:
+    post:
+      operationId: batches_upload_create
+      tags:
+      - batches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Upload'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Upload'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Upload'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Batch'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Batch'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/candidates/:
+    get:
+      operationId: candidates_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - candidates
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCandidateList'
+          description: ''
+    post:
+      operationId: candidates_create
+      tags:
+      - candidates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+          description: ''
+  /api/candidates/{id}/:
+    get:
+      operationId: candidates_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this candidate.
+        required: true
+      tags:
+      - candidates
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+          description: ''
+    put:
+      operationId: candidates_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this candidate.
+        required: true
+      tags:
+      - candidates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+          description: ''
+    patch:
+      operationId: candidates_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this candidate.
+        required: true
+      tags:
+      - candidates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCandidate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCandidate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCandidate'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+          description: ''
+    delete:
+      operationId: candidates_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this candidate.
+        required: true
+      tags:
+      - candidates
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/interview-feedback/:
+    get:
+      operationId: interview_feedback_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - interview-feedback
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFeedbackList'
+          description: ''
+    post:
+      operationId: interview_feedback_create
+      tags:
+      - interview-feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+          description: ''
+  /api/interview-slots/:
+    get:
+      operationId: interview_slots_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - interview-slots
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSlotList'
+          description: ''
+  /api/interview-slots/{id}/:
+    get:
+      operationId: interview_slots_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this interview slot.
+        required: true
+      tags:
+      - interview-slots
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Slot'
+          description: ''
+  /api/interview-slots/create/:
+    post:
+      operationId: interview_slots_create_create
+      tags:
+      - interview-slots
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Slot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Slot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Slot'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Slot'
+          description: ''
+  /api/interviews/assign/:
+    post:
+      operationId: interviews_assign_create
+      tags:
+      - interviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Assign'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Assign'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/roles/:
+    get:
+      operationId: roles_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - roles
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedJobRoleList'
+          description: ''
+  /api/roles/{id}/:
+    get:
+      operationId: roles_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this job role.
+        required: true
+      tags:
+      - roles
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobRole'
+          description: ''
+  /api/screening-results/:
+    get:
+      operationId: screening_results_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - screening-results
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedScreeningList'
+          description: ''
+  /api/screening/nlp/:
+    post:
+      operationId: screening_nlp_create
+      tags:
+      - screening
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NLP'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NLP'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NLP'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/screening/predict/:
+    post:
+      operationId: screening_predict_create
+      tags:
+      - screening
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Predict'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Predict'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Predict'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+components:
+  schemas:
+    Assign:
+      type: object
+      properties:
+        candidate:
+          type: integer
+        slot:
+          type: integer
+      required:
+      - candidate
+      - slot
+    Batch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/BatchStatusEnum'
+        total_rows:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        processed_rows:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        accepted_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        rejected_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        error:
+          type: string
+        task_id:
+          type: string
+          maxLength: 100
+        exports:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - exports
+      - id
+    BatchStatusEnum:
+      enum:
+      - QUEUED
+      - PROCESSING
+      - COMPLETED
+      - FAILED
+      type: string
+      description: |-
+        * `QUEUED` - Queued
+        * `PROCESSING` - Processing
+        * `COMPLETED` - Completed
+        * `FAILED` - Failed
+    Candidate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        candidate_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone:
+          type: string
+          maxLength: 20
+        college:
+          type: string
+          maxLength: 200
+        applied_role:
+          type: integer
+        batch:
+          type: integer
+          readOnly: true
+          nullable: true
+        skills:
+          type: string
+        experience_months:
+          type: integer
+          maximum: 600
+          minimum: 0
+        notice_period_days:
+          type: integer
+          maximum: 365
+          minimum: 0
+        expected_salary:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        resume_text:
+          type: string
+        portfolio_url:
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        historical_selection_status:
+          type: string
+          maxLength: 15
+        status:
+          $ref: '#/components/schemas/CandidateStatusEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - applied_role
+      - batch
+      - candidate_name
+      - created_at
+      - email
+      - expected_salary
+      - experience_months
+      - id
+      - notice_period_days
+      - phone
+      - skills
+      - updated_at
+    CandidateStatusEnum:
+      enum:
+      - NEW
+      - SHORTLISTED
+      - INTERVIEW
+      - SELECTED
+      - WAITLISTED
+      - REJECTED
+      type: string
+      description: |-
+        * `NEW` - New
+        * `SHORTLISTED` - Shortlisted
+        * `INTERVIEW` - Interview
+        * `SELECTED` - Selected
+        * `WAITLISTED` - Waitlisted
+        * `REJECTED` - Rejected
+    Feedback:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        slot:
+          type: integer
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+        comments:
+          type: string
+        recommendation:
+          $ref: '#/components/schemas/RecommendationEnum'
+        submitted_by:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - comments
+      - created_at
+      - id
+      - rating
+      - recommendation
+      - slot
+      - submitted_by
+    JobRole:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_-]{1,19}$
+          maxLength: 20
+        required_skills: {}
+        min_experience_months:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        max_notice_period_days:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        max_salary:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+      required:
+      - code
+      - id
+      - name
+      - url
+    Logout:
+      type: object
+      properties:
+        refresh:
+          type: string
+      required:
+      - refresh
+    NLP:
+      type: object
+      properties:
+        resume_text:
+          type: string
+          maxLength: 30000
+        role:
+          type: integer
+      required:
+      - resume_text
+      - role
+    PaginatedCandidateList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Candidate'
+    PaginatedFeedbackList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feedback'
+    PaginatedJobRoleList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobRole'
+    PaginatedScreeningList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Screening'
+    PaginatedSlotList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Slot'
+    PatchedCandidate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        candidate_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone:
+          type: string
+          maxLength: 20
+        college:
+          type: string
+          maxLength: 200
+        applied_role:
+          type: integer
+        batch:
+          type: integer
+          readOnly: true
+          nullable: true
+        skills:
+          type: string
+        experience_months:
+          type: integer
+          maximum: 600
+          minimum: 0
+        notice_period_days:
+          type: integer
+          maximum: 365
+          minimum: 0
+        expected_salary:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        resume_text:
+          type: string
+        portfolio_url:
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        historical_selection_status:
+          type: string
+          maxLength: 15
+        status:
+          $ref: '#/components/schemas/CandidateStatusEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    Predict:
+      type: object
+      properties:
+        experience_months:
+          type: integer
+          maximum: 600
+          minimum: 0
+        notice_period_days:
+          type: integer
+          maximum: 365
+          minimum: 0
+        expected_salary:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        skills:
+          type: string
+          maxLength: 2000
+        applied_role:
+          type: string
+          maxLength: 100
+      required:
+      - applied_role
+      - expected_salary
+      - experience_months
+      - notice_period_days
+      - skills
+    RecommendationEnum:
+      enum:
+      - SELECTED
+      - WAITLISTED
+      - REJECTED
+      type: string
+      description: |-
+        * `SELECTED` - Selected
+        * `WAITLISTED` - Waitlisted
+        * `REJECTED` - Rejected
+    Register:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+      required:
+      - email
+      - password
+      - username
+    Screening:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        rule_passed:
+          type: boolean
+        rule_reasons: {}
+        ml_probability:
+          type: number
+          format: double
+          nullable: true
+        keyword_score:
+          type: number
+          format: double
+        matched_skills: {}
+        pos_tags: {}
+        model_version:
+          type: string
+          maxLength: 100
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        candidate:
+          type: integer
+      required:
+      - candidate
+      - id
+      - updated_at
+    Slot:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        role:
+          type: integer
+        candidate:
+          type: integer
+          nullable: true
+        interviewer:
+          type: integer
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+        location:
+          type: string
+          maxLength: 200
+      required:
+      - ends_at
+      - id
+      - interviewer
+      - role
+      - starts_at
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    Upload:
+      type: object
+      properties:
+        file:
+          type: string
+          format: uri
+        background:
+          type: boolean
+          default: false
+      required:
+      - file
+    VerifiedToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - username
+    Verify:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        code:
+          type: string
+          pattern: ^\d{6}$
+      required:
+      - code
+      - email
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

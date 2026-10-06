@@ -1,0 +1,173 @@
+{
+  "checked_at_utc": "2026-10-05T06:10:04.911003+00:00",
+  "checks": [
+    {
+      "check": "Redis ping",
+      "passed": true
+    },
+    {
+      "check": "Unauthenticated candidate access",
+      "status": 401,
+      "passed": true
+    },
+    {
+      "check": "hr JWT login",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Hyperlinked role list",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Upload candidates.csv",
+      "status": 201,
+      "passed": true
+    },
+    {
+      "check": "Download accepted rows",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Download rejected rows",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Upload candidates.xlsx",
+      "status": 201,
+      "passed": true
+    },
+    {
+      "check": "Upload large_batch.csv",
+      "status": 202,
+      "passed": true
+    },
+    {
+      "check": "Real Celery upload",
+      "passed": true,
+      "states": [
+        "QUEUED",
+        "PROCESSING",
+        "COMPLETED"
+      ],
+      "accepted": 120
+    },
+    {
+      "check": "Candidate list",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Set shortlist stage",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "ML prediction 1",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "ML prediction 2",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "NLTK analysis",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Blank resume NLP",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "interviewer JWT login",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Interviewer candidate restriction",
+      "status": 403,
+      "passed": true
+    },
+    {
+      "check": "Assign interview",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Submit interviewer feedback",
+      "status": 201,
+      "passed": true
+    },
+    {
+      "check": "Browser sign-in",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Page /dashboard/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Page /dashboard/candidates/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Page /dashboard/candidates/266/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Page /dashboard/batches/4/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Page /dashboard/interviews/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Page /api/docs/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Page /api/schema/",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "CSRF AJAX duplicate email",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "AJAX role slots",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Redis shortlist caching",
+      "passed": true
+    },
+    {
+      "check": "JWT logout",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "Revoked refresh rejected",
+      "status": 401,
+      "passed": true
+    }
+  ]
+}

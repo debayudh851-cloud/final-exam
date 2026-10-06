@@ -1,0 +1,17 @@
+Django>=5.2,<5.3
+djangorestframework>=3.16,<4
+djangorestframework-simplejwt>=5.5,<6
+drf-spectacular>=0.28,<1
+drf-spectacular-sidecar>=2026,<2027
+psycopg[binary]>=3.2,<4
+celery>=5.5,<6
+redis>=6,<8
+pandas>=2.2,<4
+numpy>=2,<3
+matplotlib>=3.10,<4
+scikit-learn>=1.6,<2
+nltk>=3.9,<4
+tensorflow>=2.20,<2.22
+openpyxl>=3.1,<4
+python-dotenv>=1,<2
+Pillow>=11,<13

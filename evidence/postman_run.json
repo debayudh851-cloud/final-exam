@@ -1,0 +1,208 @@
+{
+  "runner": "Postman Newman",
+  "checked_at_utc": "2026-10-05T06:21:33.050Z",
+  "stats": {
+    "iterations": {
+      "total": 1,
+      "pending": 0,
+      "failed": 0
+    },
+    "items": {
+      "total": 14,
+      "pending": 0,
+      "failed": 0
+    },
+    "scripts": {
+      "total": 14,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequests": {
+      "total": 14,
+      "pending": 0,
+      "failed": 0
+    },
+    "requests": {
+      "total": 14,
+      "pending": 0,
+      "failed": 0
+    },
+    "tests": {
+      "total": 14,
+      "pending": 0,
+      "failed": 0
+    },
+    "assertions": {
+      "total": 14,
+      "pending": 0,
+      "failed": 0
+    },
+    "testScripts": {
+      "total": 14,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequestScripts": {
+      "total": 0,
+      "pending": 0,
+      "failed": 0
+    }
+  },
+  "failures": [],
+  "requests": [
+    {
+      "name": "01 Unauthenticated access denied",
+      "method": "GET",
+      "status": 401,
+      "assertions": [
+        {
+          "name": "Status is 401",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "02 Login as HR",
+      "method": "POST",
+      "status": 200,
+      "assertions": [
+        {
+          "name": "Status is 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "03 List hyperlinked roles",
+      "method": "GET",
+      "status": 200,
+      "assertions": [
+        {
+          "name": "Status is 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "04 Create synthetic candidate",
+      "method": "POST",
+      "status": 201,
+      "assertions": [
+        {
+          "name": "Status is 201",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "05 Retrieve candidate",
+      "method": "GET",
+      "status": 200,
+      "assertions": [
+        {
+          "name": "Status is 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "06 PUT candidate",
+      "method": "PUT",
+      "status": 200,
+      "assertions": [
+        {
+          "name": "Status is 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "07 PATCH screening stage",
+      "method": "PATCH",
+      "status": 200,
+      "assertions": [
+        {
+          "name": "Status is 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "08 Invalid number rejected",
+      "method": "PATCH",
+      "status": 400,
+      "assertions": [
+        {
+          "name": "Status is 400",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "09 Secured ML prediction",
+      "method": "POST",
+      "status": 200,
+      "assertions": [
+        {
+          "name": "Status is 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "10 NLTK resume analysis",
+      "method": "POST",
+      "status": 200,
+      "assertions": [
+        {
+          "name": "Status is 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "11 Screening results",
+      "method": "GET",
+      "status": 200,
+      "assertions": [
+        {
+          "name": "Status is 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "12 Delete synthetic API record",
+      "method": "DELETE",
+      "status": 204,
+      "assertions": [
+        {
+          "name": "Status is 204",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "13 Logout refresh token",
+      "method": "POST",
+      "status": 200,
+      "assertions": [
+        {
+          "name": "Status is 200",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "14 Revoked refresh denied",
+      "method": "POST",
+      "status": 401,
+      "assertions": [
+        {
+          "name": "Status is 401",
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "check": "Real Celery malformed-input failure",
+  "batch_id": 7,
+  "status": "FAILED",
+  "error": "Processing failed. Check the worker log; retry the batch after fixing the cause.",
+  "accepted_count": 0,
+  "passed": true
+}

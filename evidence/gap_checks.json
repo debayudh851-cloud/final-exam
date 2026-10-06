@@ -1,0 +1,86 @@
+{
+  "checked_at_utc": "2026-10-05T06:44:46.015527+00:00",
+  "checks": [
+    {
+      "check": "HR API login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "HR browser login",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "Create rejected JSON test candidate",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "check": "All-candidate JSON response",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "JSON includes every row and rejected candidate",
+      "passed": true,
+      "rows": 267
+    },
+    {
+      "check": "Individual rejected candidate JSON",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "Dashboard aggregate display",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "Grouped minimum-applications filter",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "Invalid report filter handled",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "Upload candidates.csv",
+      "passed": true,
+      "status": 201
+    },
+    {
+      "check": "Rejected-row export",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "check": "Integrated recursive errors, raw-row copy, and outcome counts",
+      "passed": true,
+      "accepted": 13,
+      "rejected": 3
+    },
+    {
+      "check": "Upload large_batch.csv",
+      "passed": true,
+      "status": 202
+    },
+    {
+      "check": "Integrated helpers in real Celery upload",
+      "passed": true,
+      "states": [
+        "QUEUED",
+        "PROCESSING",
+        "COMPLETED"
+      ],
+      "processed_rows": 120
+    },
+    {
+      "check": "Remove own synthetic JSON test candidate",
+      "passed": true,
+      "status": 204
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "source": "Verified submission ZIP extraction",
+  "runtime": "Existing verified virtual environment; fresh source and database",
+  "checks": [
+    {
+      "command": [
+        "manage.py",
+        "migrate",
+        "--noinput"
+      ],
+      "passed": true
+    },
+    {
+      "command": [
+        "manage.py",
+        "makemigrations",
+        "--check"
+      ],
+      "passed": true
+    },
+    {
+      "command": [
+        "manage.py",
+        "seed_demo"
+      ],
+      "passed": true
+    },
+    {
+      "command": [
+        "manage.py",
+        "setup_nlp"
+      ],
+      "passed": true
+    },
+    {
+      "command": [
+        "manage.py",
+        "check"
+      ],
+      "passed": true
+    },
+    {
+      "command": [
+        "manage.py",
+        "shell",
+        "--command"
+      ],
+      "passed": true
+    },
+    {
+      "command": [
+        "scripts/check_sql.py"
+      ],
+      "passed": true
+    }
+  ],
+  "upload_accepted": 13,
+  "upload_rejected": 3,
+  "passed": true
+}

@@ -1,0 +1,19 @@
+{% load static %}
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}TalentDesk · Recruitment intelligence{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'portal.css' %}"><link rel="stylesheet" href="{% static 'reports.css' %}"><script src="{% static 'portal.js' %}" defer></script></head>
+<body><div class="shell">
+<aside class="sidebar"><a class="brand" href="{% url 'dashboard' %}"><span class="brand-mark">T</span> TalentDesk</a>
+<div class="workspace-tag">CAMPUS RECRUITMENT</div>
+{% if user.is_authenticated %}<nav aria-label="Main navigation">
+{% if user.can_manage_candidates %}<a href="{% url 'dashboard' %}">Overview</a><a href="{% url 'candidate-list' %}">Candidates</a><a href="{% url 'upload' %}">Import applications</a>{% endif %}
+<a href="{% url 'interviews' %}">Interviews</a><a href="{% url 'swagger-ui' %}">API documentation</a>
+{% if user.is_staff %}<a href="/admin/">Administration</a>{% endif %}</nav>
+<div class="profile"><span class="avatar">{{ user.username|first|upper }}</span><div><strong>{{ user.username }}</strong><small>{{ user.get_role_display }}</small></div>
+<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="text-button" title="Sign out">Sign out</button></form></div>
+{% else %}<nav><a href="{% url 'login' %}">Sign in</a><a href="{% url 'register' %}">Create HR account</a><a href="{% url 'verify' %}">Verify email</a></nav>{% endif %}
+<div class="sidebar-note">Local assessment prototype<br><span>Scores support human review.</span></div></aside>
+<main><header class="topbar"><span>Recruitment intelligence portal</span><span class="local-pill">● Local workspace</span></header>
+<div class="content">{% for message in messages %}<div class="alert {{ message.tags }}" role="status">{{ message }}</div>{% endfor %}
+{% block content %}{% endblock %}</div></main></div></body></html>

@@ -1,0 +1,472 @@
+{
+  "info": {
+    "name": "TalentDesk Assessment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "access",
+      "value": ""
+    },
+    {
+      "key": "refresh",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Unauthenticated access denied",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/candidates/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 401\", function () { pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Login as HR",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/auth/login/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"hr\", \"password\": \"{{password}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+              "const loginPayload = pm.response.json(); pm.collectionVariables.set(\"access\", loginPayload.access); pm.collectionVariables.set(\"refresh\", loginPayload.refresh);",
+              "pm.collectionVariables.set(\"run_id\", Date.now().toString());"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 List hyperlinked roles",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          }
+        ],
+        "url": "{{base_url}}/api/roles/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+              "const roles = pm.response.json().results; pm.expect(roles.length).to.be.above(0); pm.collectionVariables.set(\"role_id\", roles[0].id); pm.collectionVariables.set(\"role_name\", roles[0].name);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Create synthetic candidate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/candidates/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"candidate_name\": \"Postman Demo\", \"email\": \"postman.{{run_id}}@example.test\", \"phone\": \"9876543210\", \"college\": \"Demo College\", \"applied_role\": \"{{role_id}}\", \"skills\": \"python, django, sql\", \"experience_months\": 12, \"notice_period_days\": 30, \"expected_salary\": \"500000.00\", \"resume_text\": \"I build Python and Django applications with SQL and Git.\", \"portfolio_url\": \"\", \"historical_selection_status\": \"SELECTED\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 201\", function () { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"candidate_id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Retrieve candidate",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          }
+        ],
+        "url": "{{base_url}}/api/candidates/{{candidate_id}}/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 PUT candidate",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/candidates/{{candidate_id}}/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"candidate_name\": \"Postman Demo\", \"email\": \"postman.{{run_id}}@example.test\", \"phone\": \"9876543210\", \"college\": \"Updated Demo College\", \"applied_role\": \"{{role_id}}\", \"skills\": \"python, django, sql\", \"experience_months\": 12, \"notice_period_days\": 30, \"expected_salary\": \"500000.00\", \"resume_text\": \"I build Python and Django applications with SQL and Git.\", \"portfolio_url\": \"\", \"historical_selection_status\": \"SELECTED\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 PATCH screening stage",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/candidates/{{candidate_id}}/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"status\": \"SHORTLISTED\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 Invalid number rejected",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/candidates/{{candidate_id}}/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"experience_months\": -1}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 400\", function () { pm.response.to.have.status(400); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 Secured ML prediction",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/screening/predict/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"experience_months\": 12, \"notice_period_days\": 30, \"expected_salary\": 500000, \"skills\": \"python, django, sql\", \"applied_role\": \"{{role_name}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.expect(pm.response.json().probability).to.be.within(0, 1);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 NLTK resume analysis",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/screening/nlp/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"resume_text\": \"Python Django PostgreSQL SQL Git\", \"role\": \"{{role_id}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.expect(pm.response.json().pos_tags.length).to.be.above(0);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 Screening results",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          }
+        ],
+        "url": "{{base_url}}/api/screening-results/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 Delete synthetic API record",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          }
+        ],
+        "url": "{{base_url}}/api/candidates/{{candidate_id}}/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 204\", function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 Logout refresh token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/auth/logout/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"refresh\": \"{{refresh}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 Revoked refresh denied",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/auth/refresh/",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"refresh\": \"{{refresh}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status is 401\", function () { pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

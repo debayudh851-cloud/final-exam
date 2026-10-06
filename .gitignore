@@ -1,0 +1,11 @@
+.venv/
+my_venv/
+.tmp/
+.env
+__pycache__/
+*.pyc
+media/
+artifacts/
+logs/
+*.zip
+.tools/
